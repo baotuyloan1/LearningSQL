@@ -106,3 +106,36 @@ FROM OrderItems
 GROUP BY items //[order_num]
 HAVING COUNT(*) >= 3
 ORDER BY items, order_num; */
+
+/*
+Write a query to retrieve the customer names, addresses (combine cust_address, 
+cust_city, and cust_state into one column as full_address), and email addresses 
+for customers who live in states starting with the letter 'C'. Ensure the cust_name is in uppercase.
+*/
+
+SELECT UPPER([cust_name]),CONCAT([cust_address],', ' ,[cust_city], ', ', [cust_state] )  AS full_address, [cust_email]
+FROM [dbo].[Customers]
+WHERE RIGHT([cust_state],1) = 'C'
+
+/*
+Write a query that shows the number of customers (customer_count) in each state (cust_state). 
+Only display states with more than 5 customers and sort the results by customer_count in descending order.
+*/
+
+SELECT COUNT([cust_name]) AS Custs, [cust_state] AS Cust_State
+FROM [dbo].[Customers]
+GROUP BY [cust_state]
+HAVING COUNT([cust_name]) >= 5 
+ORDER BY Custs DESC
+
+
+/*
+Find the total number of customers (total_customers) in each country, but only for countries 
+where at least one customer has a non-empty (IS NOT NULL) email address.
+Show the total number of customers for each country and filter out those with fewer than 10 customers.
+*/
+
+SELECT COUNT(cust_name) AS Total
+FROM [dbo].[Customers]
+GROUP BY [cust_country]
+HAVING COUNT([cust_email]) > 0 AND COUNT(cust_name) >= 10
